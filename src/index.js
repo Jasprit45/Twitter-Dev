@@ -22,7 +22,7 @@ app.listen(PORT, async ()=> {
     // tweet.comments.push({content: 'first comment'});
     // await tweet.save();
 
-    // const tweet  = await tweetRepo.create({content: "Tweet with comment schema"});
+    // const tweet  = await tweetRepo.create({content: "Tweet with hook"});
     // const comment = await Comment.create({content: 'new comment'});
     // console.log(tweet);
     // tweet.comments.push(comment);
@@ -30,5 +30,6 @@ app.listen(PORT, async ()=> {
 
     const tweet = await tweetRepo.getALl(0,4);
     // const tweet = await tweetRepo.get('697a498add93be7f3ad641d7');
-    console.log(tweet[0].contentWithEmail);
+    // console.log(tweet[0].contentWithEmail);
+    console.log(tweet);
 });  
