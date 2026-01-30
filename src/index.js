@@ -1,8 +1,8 @@
 const express = require('express');
 const Connect = require('./config/database');
 const app = express();
+const TweetService = require('./services/tweet-service');
 
-const TweetRepository = require('./repository/tweet-repository');
 const Comment = require('./models/comment');
 const PORT = 3000;
 
@@ -10,8 +10,10 @@ app.listen(PORT, async ()=> {
     console.log(`server started at ${PORT}`);
     await Connect();
     console.log('Mongodb connected ');
-    const tweetRepo = new TweetRepository();
+    const tweetservice = new TweetService();
 
-    const tweet = await tweetRepo.getALl(0,4);
+    const tweet = await tweetservice.create({
+        content: '#hello, my #first #tweet on #twitter today really #excited'
+    });
     console.log(tweet);
 });  

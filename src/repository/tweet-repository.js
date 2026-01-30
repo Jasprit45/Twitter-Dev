@@ -13,7 +13,16 @@ class TweetRepository  {
             console.log(error);
         }
     }
-
+    async insertHashtags(tweetId,data) {
+        try {
+            const tweet = await Tweet.findById(tweetId);
+            tweet.hashtags = data.map(item=>item.id);
+            await tweet.save();
+            return tweet;
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async get(id) {
         try {
             const tweet = await Tweet.findById(id);
