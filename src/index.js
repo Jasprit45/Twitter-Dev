@@ -3,6 +3,9 @@ const Connect = require('./config/database');
 const app = express();
 const TweetService = require('./services/tweet-service');
 
+const {TweetRepository,HashtagRepository} = require('./repository/index');
+
+
 const Comment = require('./models/comment');
 const PORT = 3000;
 
@@ -13,7 +16,10 @@ app.listen(PORT, async ()=> {
     const tweetservice = new TweetService();
 
     const tweet = await tweetservice.create({
-        content: '#hello, my #first #tweet on #twitter today really #excited'
+        content: 'hi, i am #new hear #excited to get #started',
     });
+    // const repo = new HashtagRepository();
+    // const data = ['hi','hello','new','love'];
+    // const tweet = await repo.getByTitle(data); 
     console.log(tweet);
 });  

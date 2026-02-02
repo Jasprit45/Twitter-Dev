@@ -1,6 +1,4 @@
-const {TweetRepository} = require('../repository/index');
-const Hashtag = require('../models/hashtags');
-const HashtagRepository = require('../repository/hashtag-repository');
+const {TweetRepository,HashtagRepository} = require('../repository/index');
 
 class TweetService {
     constructor() {
@@ -10,72 +8,31 @@ class TweetService {
 
     async create(data) {
         const content = data.content;
-        const tags = content.match(/#[a-zA-Z0-9_]+/g); // this regex extract hashtags
-        const tagss = tags.map((tag) => tag.substring(1));
+        const tags = content.match(/#[a-zA-Z0-9_]+/g).map((tag) => tag.substring(1)); // this regex extract hashtags
         
-        // console.log(tagss);
         const tweet = await this.tweetRepository.create(data);
 
-        const tweetId = tweet.id;
-        // console.log(tweetId);
+        let alreadyPresentTags = await this.hashtagRepository.getByTitle(tags);
+        let titleOfPresentTags = alreadyPresentTags.map((tag)=> tag.title);
 
-        const existingHashtags = await Hashtag.find(
-            {
-                title:{$in: tagss},
-            },
-            {
-                title:1,
-                _id:0
-            }
-        );
+        let newTags = tags.filter(tag => !titleOfPresentTags.includes(tag));
+        newTags = newTags.map(tag=> {
+            return {title:tag,tweets: [tweet.id]}
+        });
+        await this.hashtagRepository.createMany(newTags);
 
-        const existingContents = existingHashtags.map(
-            h=>h.title
-        );
-        // console.log('---');
-        // console.log(existingHashtags);
-        // console.log('---');
-        // console.log(existingContents);
-        // console.log('---');
+        alreadyPresentTags.forEach((tag)=> {
+            tag.tweets.push(tweet.id);
+            tag.save();
+        });
 
-        const filteredHashtags = tagss.filter(
-            hastag => !existingContents.includes(hastag)
-        );
+        const idOfAllTags =  await this.hashtagRepository.getByTitle(tags);
 
-        const formattedHashtags = filteredHashtags.map(tag=> ({
-            title:tag
-        }));
-
-        console.log(filteredHashtags);
-
-        const res = await this.hashtagRepository.createMany(formattedHashtags);
-        // console.log(`res :${res}`);
-
-        const result = await this.hashtagRepository.addTweet(tweetId,tagss);
-        // console.log(`result:${result}`);
-
-        // tagss.map(async (tag) => (console.log(tag)));
-
-        const tagsIds = await Promise.all(
-            tagss.map(async (tag) => ({
-                id: await this.hashtagRepository.getByTitle(tag)
-            }))
-        );
-
-        // console.log(tagsIds);
-
-        const response = await this.tweetRepository.insertHashtags(tweetId,tagsIds);
-        // console.log(`response: ${response}`);
-
-
-
-        //todo: create hashtags and add here
-        /**
-         * 1. bulkcreate in mangoose
-         * 2. filter title of hashtag based on multiple tags
-         * 3. how to add tweet id  inside all the hashtags
-         */
-        return response;
+        idOfAllTags.forEach((tag)=> {
+            tweet.hashtags.push(tag.id);
+        });
+        tweet.save();
+        return tweet;
     }
 }
 

@@ -2,6 +2,32 @@ const Hashtag = require('../models/hashtags');
 
 class HashtagRepository {
 
+    async create(tag) {
+        try {
+            const response =  await Hashtag.create(tag);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async get(id) {
+            try {
+                const tag = await Hashtag.findById(id);
+                return tag;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    async destroy(id) {
+            try {
+                const tag = await Hashtag.findByIdAndDelete(id);
+                return tag;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
     async createMany(data) {
         try {
             // console.log(data);
@@ -25,9 +51,12 @@ class HashtagRepository {
     }
     async getByTitle(data) {
         try {
-            const res = await Hashtag.findOne({title:data});
+            // console.log(data);
+            const res = await Hashtag.find({
+                title: data
+            });
             if(!res) return null;
-            return res.id;
+            return res;
         } catch (error) {
             console.log(error);
         }
