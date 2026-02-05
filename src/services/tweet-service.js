@@ -8,7 +8,7 @@ import {TweetRepository,HashtagRepository} from '../repository/index.js';
 
     async create(data) {
         const content = data.content;
-        const tags = content.match(/#[a-zA-Z0-9_]+/g).map((tag) => tag.substring(1)); // this regex extract hashtags
+        const tags = content.match(/#[a-zA-Z0-9_]+/g).map((tag) => tag.substring(1).toLowerCase()); // this regex extract hashtags
         
         const tweet = await this.tweetRepository.create(data);
 
@@ -26,12 +26,6 @@ import {TweetRepository,HashtagRepository} from '../repository/index.js';
             tag.save();
         });
 
-        const idOfAllTags =  await this.hashtagRepository.getByTitle(tags);
-
-        idOfAllTags.forEach((tag)=> {
-            tweet.hashtags.push(tag.id);
-        });
-        tweet.save();
         return tweet;
     }
 }

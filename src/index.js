@@ -16,11 +16,11 @@ app.listen(PORT, async ()=> {
     console.log('Mongodb connected ');
     const tweetservice = new TweetService();
 
-    // const tweet = await tweetservice.create({
-    //     content: 'Done with #refactor',
-    // });
+    const tweet = await tweetservice.create({
+        content: '#Bro,#lets #START ',
+    });
     // const repo = new HashtagRepository();
     // const data = ['hi','hello','new','love'];
     // const tweet = await repo.getByTitle(data); 
-    // console.log(tweet);
+    console.log(tweet);
 });  
