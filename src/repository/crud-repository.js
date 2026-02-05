@@ -1,7 +1,6 @@
-
 class CrudRepository  {
     constructor(model) {
-        super();
+        // super();
         this.model = model;
     }
 
@@ -11,6 +10,7 @@ class CrudRepository  {
             return res;
         } catch (error) {
             console.log(error);
+            console.log("Something went wrong in crud-repository");
         }
     }
     async get(id) {
@@ -19,6 +19,7 @@ class CrudRepository  {
             return res;
         } catch (error) {
             console.log(error);
+            console.log("Something went wrong in crud-repository");
         }
     }
     
@@ -28,18 +29,30 @@ class CrudRepository  {
             return res;
         } catch (error) {
             console.log(error);
+            console.log("Something went wrong in crud-repository");
         }
     }
 
-    async getAll(offset,limit) {
+    async update(id,data){
         try {
-            const tweet = await Tweet.find().skip(offset).limit(limit);
-            return tweet;
+            const res = await this.model.findByIdAndUpdate(id,data, {new:true});
+            return res;
         } catch (error) {
             console.log(error);
+            console.log("Something went wrong in crud-repository");
+        }
+    }
+
+    async getAll() {
+        try {
+            const res = await this.model.find();
+            return res;
+        } catch (error) {
+            console.log(error);
+            console.log("Something went wrong in crud-repository");
         }
     }
     
 }
 
-export default TweetRepository;
+export default CrudRepository;
