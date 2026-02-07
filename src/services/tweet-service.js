@@ -26,12 +26,12 @@ import {TweetRepository,HashtagRepository} from '../repository/index.js';
                 tag.tweets.push(tweet.id);
                 tag.save();
             });
+            return tweet;
         } catch (error) {
             console.log('Something went wrong in getting a tweet in tweet repository');
             throw error;
         }
 
-        return tweet;
     }
 
     async get(tweetId) {
