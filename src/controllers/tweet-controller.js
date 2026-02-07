@@ -17,6 +17,6 @@ export const createTweet = async (req,res) => {
             message: "Something went wrong in creating a tweet",
             data: {},
             error: error,
-        })
+        });
     }
 }
