@@ -9,8 +9,6 @@ export const signup = async(req,res) => {
             password:req.body.password,
             name: req.body.name
         });
-        console.log(response);
-
         return res.status(201).json({
             success: true,
             message: "Successfully signup",
@@ -21,6 +19,29 @@ export const signup = async(req,res) => {
         return res.status(500).json({
             success: false,
             message: "Something went wrong in signip",
+            data: {},
+            error: error,
+        });
+    }
+}
+
+export const login = async(req,res) => {
+    try {
+        const token = await userservice.signin(
+            req.body.email,
+            req.body.password
+        );
+        return res.status(200).json({
+            success: true,
+            message: "Successfully login",
+            data: token,
+            error: {},
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong in login",
             data: {},
             error: error,
         });

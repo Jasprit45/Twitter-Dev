@@ -17,17 +17,37 @@ class UserService {
 
     async signin(email,password){
         try {
-            const user = await this.userRepository.getByEmail(email);
+            const user = await this.getUserByEmail(email);
+            console.log(user);
+            if(!user){
+                throw {
+                    message: "no user found",
+                };
+            }
+            if(!user.comparePassword(password)) {
+                throw {
+                    message: "incorrect password",
+                };
+            }
 
-            //match password
-            //create a token for user
+            const token = user.genJWT();
+            return token;
 
-            return user;
         } catch (error) {
             console.log("Something went wrong in signup of user service layer")
             throw error;
         }
     }
+
+    async getUserByEmail(email){
+        try {
+            const user = await this.userRepository.findBy({email:email});
+            return user;
+        } catch (error) {
+            console.log("Something went wrong user service layer")
+            throw error;
+        }
+    } 
 
 }
 
