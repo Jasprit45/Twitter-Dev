@@ -5,6 +5,16 @@ class TweetRepository extends CrudRepository  {
     constructor() {
         super(Tweet);
     }
+    async create(data) {
+        try {
+            const res = await Tweet.create(data);
+            return res;
+        } catch (error) {
+            console.log("Something went wrong in tweet-repository");
+            console.log(error);
+            throw error;
+        }
+    }
     async insertHashtags(tweetId,data) {
         try {
             const tweet = await Tweet.findById(tweetId);
