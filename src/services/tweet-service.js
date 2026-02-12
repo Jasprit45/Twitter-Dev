@@ -9,7 +9,11 @@ import {TweetRepository,HashtagRepository} from '../repository/index.js';
     async create(data) {
         try {
             const content = data.content;
-            const tags = content.match(/#[a-zA-Z0-9_]+/g).map((tag) => tag.substring(1).toLowerCase()); // this regex extract hashtags
+            const tags = content.match(/#[a-zA-Z0-9_]+/g);
+            if(!tags) {
+                const tweet = await this.tweetRepository.create(data);
+                return tweet;
+            } else tags = tags.map((tag) => tag.substring(1).toLowerCase()); // this regex extract hashtags
             
             const tweet = await this.tweetRepository.create(data);
 

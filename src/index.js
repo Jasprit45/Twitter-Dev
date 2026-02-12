@@ -5,7 +5,9 @@ import apiRoutes from './routes/index.js'
 import passport from 'passport';
 import {UserRepository,TweetRepository} from './repository/index.js'
 import LikeService from './services/like-service.js';
-import {passportAuth} from './config/jwt-middleware.js'
+import {passportAuth} from './config/jwt-middleware.js';
+import dotenv from 'dotenv';
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
